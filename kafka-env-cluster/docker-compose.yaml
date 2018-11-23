@@ -1,0 +1,130 @@
+--- 
+version: "2"
+services: 
+#  zk_1: 
+#    image: confluentinc/cp-zookeeper:latest
+#    network_mode: host
+#    restart: always
+#    ports: 
+#      - 22181:22181
+#    environment:
+#      ZOOKEEPER_SERVER_ID: 1
+#      ZOOKEEPER_CLIENT_PORT: 22181
+#      ZOOKEEPER_SERVERS: "${ZK_SERVERS}" #"localhost:22888:23888"
+#  
+#  zk_2: 
+#    image: confluentinc/cp-zookeeper:latest
+#    network_mode: host
+#    restart: always
+#    ports: 
+#      - 32181:32181
+#    environment:
+#      ZOOKEEPER_SERVER_ID: 2
+#      ZOOKEEPER_CLIENT_PORT: 32181
+#      ZOOKEEPER_SERVERS: "${ZK_SERVERS}"
+#  zk_3: 
+#    image: confluentinc/cp-zookeeper:latest
+#    network_mode: host
+#    restart: always
+#    ports: 
+#      - 42181:42181
+#    environment:
+#      ZOOKEEPER_SERVER_ID: 3 
+#      ZOOKEEPER_CLIENT_PORT: 42181
+#      ZOOKEEPER_SERVERS: "${ZK_SERVERS}"
+  kafka_1: 
+    network_mode: host
+    restart: always
+    environment: 
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+      KAFKA_ZOOKEEPER_CONNECT: "${KFK_ZK_CONNECT}" #localhost:2181 #"${KFK_ZK_CONNECT}" 
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://smartaqnet-0-node1.teco.edu:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      CONNECT_HEAP: "3G"
+    volumes:
+      - "./init-topics.sh:/etc/confluent/docker/init-topics.sh"
+    image: confluentinc/cp-kafka:latest
+    ports: 
+      - 9092:9092
+#  kafka_2: 
+#    network_mode: host
+#    restart: always
+#    environment: 
+#      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+#      KAFKA_ZOOKEEPER_CONNECT: "${KFK_ZK_CONNECT}" 
+#      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://swarm-node00.teco.edu:39092
+#      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+#      CONNECT_HEAP: "3G"
+#    image: confluentinc/cp-kafka:latest
+#    ports: 
+#      - 39092:39092
+#  kafka_3: 
+#    network_mode: host
+#    restart: always
+#    environment: 
+#      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+#      KAFKA_ZOOKEEPER_CONNECT: "${KFK_ZK_CONNECT}" 
+#      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://swarm-node00.teco.edu:49092
+#      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+#      CONNECT_HEAP: "3G"
+#    image: confluentinc/cp-kafka:latest
+#    ports: 
+#      - 49092:49092
+#  kafka-connect: 
+#    environment: 
+#      CONNECT_BOOTSTRAP_SERVERS: kafka:9092
+#      CONNECT_GROUP_ID: kafka-connect
+#      CONNECT_CONFIG_STORAGE_TOPIC: kafka-connect.config
+#      CONNECT_OFFSET_STORAGE_TOPIC: kafka-connect.offsets
+#      CONNECT_STATUS_STORAGE_TOPIC: kafka-connect.status
+#      CONNECT_CONFIG_STORAGE_REPLICATION_FACTOR: 1
+#      CONNECT_OFFSET_STORAGE_REPLICATION_FACTOR: 1
+#      CONNECT_STATUS_STORAGE_REPLICATION_FACTOR: 1
+#      CONNECT_KEY_CONVERTER: org.apache.kafka.connect.json.JsonConverter
+#      CONNECT_VALUE_CONVERTER: org.apache.kafka.connect.json.JsonConverter
+#      CONNECT_INTERNAL_KEY_CONVERTER: org.apache.kafka.connect.json.JsonConverter
+#      CONNECT_INTERNAL_VALUE_CONVERTER: org.apache.kafka.connect.json.JsonConverter
+#      CONNECT_REST_ADVERTISED_HOST_NAME: kafka-connect
+#      CONNECT_ZOOKEEPER_CONNECT: zookeeper:2181
+#    image: confluentinc/cp-kafka-connect
+#    links: 
+#      - zookeeper
+#      - kafka
+#    ports: 
+#      - 8083:8083
+#    volumes:
+#      - ./kafka-connect/jars:/etc/kafka-connect/jars
+#      - ~/.aws:/root/.aws
+#  kafka-connect-ui: 
+#    environment: 
+#      CONNECT_URL: "http://kafka-connect:8083"
+#    image: landoop/kafka-connect-ui
+#    links: 
+#      - kafka-connect
+#    ports:
+#      - 8000:8000
+#  landoop-ui:
+#    image: landoop/fast-data-dev
+#    environment:
+#      ADV_HOST: swarm-node00.teco.edu
+#      ZK_PORT: 0
+#      WEB_PORT: 3030
+#      BROKER_PORT: 0 
+#      RUNTESTS: 0
+#      CONNECT_BOOTSTRAP_SERVERS: smartaqnet-dev.teco.edu:9092 
+#      KAFKA_LISTENERS: smartaqnet-dev.teco.edu:9092
+#      KAFKA_REST_PROXY_URL: smartaqnet-dev.teco.edu:9092
+#      PROXY: "true"
+#    depends_on: 
+#      - kafka
+#    ports:
+#      - 3030:3030
+#  topics-ui:
+#    image: landoop/kafka-topics-ui
+#    environment:
+#      KAFKA_REST_PROXY_URL: smartaqnet-dev.teco.edu:9092
+#      PROXY: "true"
+#    depends_on: 
+#      - kafka
+#    ports:
+#      - 8000:3030

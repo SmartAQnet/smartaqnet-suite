@@ -1,0 +1,17 @@
+version: '3.2'
+
+services:
+
+
+  sftp2st:
+    build:
+        ./
+    volumes:
+      - type: bind
+        source: /root/sftp/volumes/saqn/
+        target: /root/sftp/volumes/saqn/
+
+
+
+
+

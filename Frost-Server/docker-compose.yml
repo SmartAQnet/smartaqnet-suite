@@ -1,0 +1,64 @@
+version: '2'
+
+services:
+  gui:
+    build:
+        context: .
+        dockerfile: Dockerfile_gui
+        args:
+<<<<<<< HEAD
+         #GITHASH: 8c038a3cee0da501cc1aeb37f2dd8e11f4ca663f
+          GITHASH: 612f54b06ee3deb9ec073f645e867d8a16ae4f6d
+         #GITHASH: d5b7b927919ecbe7423b64956fb040624b34c1b5
+    environment:
+      - serviceRootUrl=http://smartaqnet-dev.teco.edu:8080/FROST-Server 
+      - persistence_persistenceManagerImplementationClass=de.fraunhofer.iosb.ilt.sta.persistence.postgres.stringid.PostgresPersistenceManagerString
+      - persistence_idGenerationMode=ServerAndClientGenerated
+=======
+                #GITHASH: 8c038a3cee0da501cc1aeb37f2dd8e11f4ca663f
+          GITHASH: 612f54b06ee3deb9ec073f645e867d8a16ae4f6d
+                #GITHASH: d5b7b927919ecbe7423b64956fb040624b34c1b5
+    environment:
+        - serviceRootUrl=http://smartaqnet-dev.teco.edu:8080/FROST-Server
+        - persistence_persistenceManagerImplementationClass=de.fraunhofer.iosb.ilt.sta.persistence.postgres.stringid.PostgresPersistenceManagerString
+        - persistence_idGenerationMode=ServerAndClientGenerated
+>>>>>>> bd919841d6546190fb5b68b5665c160b81a9b9d9
+    restart: unless-stopped
+    ports:
+      - 8080:8080
+      - 1883:1883
+  database:
+    build:
+      context: ./
+      dockerfile: Dockerfile_db
+      #image: mdillon/postgis:latest
+    restart: unless-stopped
+    environment:
+      - POSTGRES_DB=sensorthings
+      - POSTGRES_USER=sensorthings
+      - POSTGRES_PASSWORD=ChangeMe
+      - WALE_FILE_PREFIX=file://var/lib/postgresql/backup/
+      - EDITOR=/usr/bin/vi
+        #'file://localhost/backups/pg'
+    ports:
+        - 5432:5432
+    volumes:
+      - postgis_data_volume:/var/lib/postgresql/data
+      - postgis_backup_volume:/lib/postgresql/backup
+      - postgis_env_volume:/etc/wal-e.d/env
+
+volumes:
+    postgis_data_volume:
+      driver: local
+      driver_opts:
+        type: 'none'
+        o: 'bind'
+        device: '/root/suite_bowen/volumes/frost/postgis_data_volume'
+    postgis_backup_volume:
+      driver: local
+      driver_opts:
+        type: 'none'
+        o: 'bind'
+        device: '/root/suite_bowen/volumes/frost/postgis_backup_volume'
+    postgis_env_volume:
+

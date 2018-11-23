@@ -1,0 +1,28 @@
+version: '3.2'
+
+services:
+
+  smartaqnet-sftp:
+      image: atmoz/sftp
+      ports:
+        - '2222:22'
+      command: upload:mfund:1001
+      volumes:
+        - type: bind
+          source: /root/sftp/volumes/saqn/
+          target: /home/upload/saqn
+
+  st2sftp:
+    build:
+        ./
+    volumes:
+      - type: bind
+        source: /root/sftp/volumes/saqn/
+        target: /root/sftp/volumes/saqn/
+
+    depends_on:
+        - smartaqnet-sftp 
+
+
+
+
