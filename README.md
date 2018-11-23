@@ -1,0 +1,2 @@
+# smartaqnet-suite
+Kappa Architecture
